@@ -1,6 +1,5 @@
 const weatherDisplay = document.querySelector('.weather');
 const weatherForm = document.querySelector('#weather-form');
-const cityInput = document.querySelector('#city-input');
 
 // Fetch weather data from API
 const fetchWeather = async (city) => {
@@ -33,8 +32,6 @@ const addWeatherToDOM = (data) => {
 
   weatherDisplay.appendChild(h1);
   weatherDisplay.appendChild(h2);
-
-  cityInput.value = '';
 };
 
 // Convert Kelvin to Fahrenheit
@@ -46,10 +43,17 @@ const kelvinToFahrenheit = (temp) => {
 weatherForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
+  while (weatherDisplay.firstChild) {
+    weatherDisplay.removeChild(weatherDisplay.firstChild);
+  }
+
+  const cityInput = e.target[0];
+
   if (cityInput.value === '') {
     alert('Please enter a city');
   } else {
     fetchWeather(cityInput.value);
+    cityInput.value = '';
   }
 });
 
