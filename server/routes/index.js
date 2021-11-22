@@ -11,7 +11,11 @@ const REDIS_URL = process.env.REDIS_URL ?? '';
 const REDIS_EXPIRY_TIME = process.env.REDIS_EXPIRY_TIME ?? 300;
 
 // Cache settings
-const client = redis.createClient(REDIS_URL);
+const client = redis.createClient(REDIS_URL, {
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
 router.get('/', (req, res) => {
   const key = `/api?q=${req.query.q}`;
