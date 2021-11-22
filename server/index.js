@@ -5,10 +5,13 @@ require('dotenv').config();
 
 const app = express();
 
+const RATE_LIMIT_WINDOW = process.env.RATE_LIMIT_WINDOW ?? 0;
+const RATE_LIMIT_MAX = process.env.RATE_LIMIT_MAX ?? 0;
+
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 10 * 60 * 10000, // 10 Mins
-  max: 100,
+  windowMs: RATE_LIMIT_WINDOW,
+  max: RATE_LIMIT_MAX,
 });
 app.use(limiter);
 app.set('trust proxy', 1);
