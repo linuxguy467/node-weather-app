@@ -1,3 +1,4 @@
+const fs = require('fs');
 const url = require('url');
 const express = require('express');
 const router = express.Router();
@@ -7,11 +8,18 @@ const redis = require('redis');
 const API_BASE_URL = process.env.API_BASE_URL ?? '';
 const API_KEY_NAME = process.env.API_KEY_NAME ?? '';
 const API_KEY_VALUE = process.env.API_KEY_VALUE ?? '';
-const REDIS_URL = process.env.REDIS_URL ?? '';
+const REDIS_TLS_URL = process.env.REDIS_TLS_URL ?? '';
+const REDIS_TLS_CERT_BASE = process.env.REDIS_TLS_CERT_BASE ?? '';
 const REDIS_EXPIRY_TIME = process.env.REDIS_EXPIRY_TIME ?? 300;
 
 // Cache settings
-const client = redis.createClient(REDIS_URL);
+const client = redis.createClient(REDIS_TLS_URL, {
+  tls: {
+    cert: fs.readFileSync(`${REDIS_TLS_CERT_BASE}/redis.crt`),
+    key: fs.readFileSync(`${REDIS_TLS_CERT_BASE}/redis.key`),
+    ca: fs.readFileSync(`${REDIS_TLS_CERT_BASE}/ca.crt`),
+  },
+});
 
 router.get('/', (req, res) => {
   const key = `/api?q=${req.query.q}`;
@@ -35,7 +43,7 @@ router.get('/', (req, res) => {
 
         if (process.env.NODE_ENV !== 'production') {
           console.log(`REQUEST: ${API_BASE_URL}?${params}`);
-          console.log(`Sending requested data to ${REDIS_URL}...`);
+          console.log(`Sending requested data to ${REDIS_TLS_URL}...`);
         }
 
         // cache into Redis
