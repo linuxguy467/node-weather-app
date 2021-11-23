@@ -9,15 +9,12 @@ const API_BASE_URL = process.env.API_BASE_URL ?? '';
 const API_KEY_NAME = process.env.API_KEY_NAME ?? '';
 const API_KEY_VALUE = process.env.API_KEY_VALUE ?? '';
 const REDIS_TLS_URL = process.env.REDIS_TLS_URL ?? '';
-const REDIS_TLS_CERT_BASE = process.env.REDIS_TLS_CERT_BASE ?? '';
 const REDIS_EXPIRY_TIME = process.env.REDIS_EXPIRY_TIME ?? 300;
 
 // Cache settings
 const client = redis.createClient(REDIS_TLS_URL, {
   tls: {
-    cert: fs.readFileSync(`${REDIS_TLS_CERT_BASE}/redis.crt`),
-    key: fs.readFileSync(`${REDIS_TLS_CERT_BASE}/redis.key`),
-    ca: fs.readFileSync(`${REDIS_TLS_CERT_BASE}/ca.crt`),
+    rejectUnauthorized: false,
   },
 });
 
