@@ -17,7 +17,12 @@ app.use(limiter);
 app.set('trust proxy', 1);
 
 // Static folder
-app.use(express.static('./public'));
+app.use(
+  express.static('./public', {
+    cacheControl: true,
+    maxAge: 86400000, // 1 day
+  })
+);
 
 // Routes
 app.use('/api', require('./routes'));
