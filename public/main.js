@@ -32,7 +32,7 @@ const fetchWeather = async (city) => {
     return
   }
 
-  const url = `/api?q=${weatherCity}`
+  const url = `/api?q=${encodeURIComponent(weatherCity)}`
 
   const res = await fetch(url)
   const data = await res.json()
