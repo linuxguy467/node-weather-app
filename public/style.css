@@ -59,3 +59,8 @@ button:hover {
   color: #000;
   cursor: pointer;
 }
+
+.wrong-input {
+  border-style: solid;
+  border-color: #d70318;
+}
